@@ -1,3 +1,4 @@
+using API.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,7 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.ConfigureCors();
 builder.Services.AddControllers();
+builder.Services.AddAplicacionServices();
+
+
 builder.Services.AddDbContext<TiendaContext>(OptionsBuilder =>
 {   
     string ? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -36,11 +41,13 @@ using(var scope= app.Services.CreateScope())
     catch(Exception ex)
     {
         var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogError(ex,"Ocurrió un error durante la migración");
+        logger.LogError(ex, "Ocurrió un error durante la migración");
     }
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

@@ -6,10 +6,10 @@ namespace API.Controllers;
 
 public class PaisApiController : BaseApiController
 {
-    public readonly IPais _paisRepository;
-    public PaisApiController(IPais paisRepository)
+    private readonly IUnitOfWork unitOfWork;
+    public PaisApiController(IUnitOfWork _unitOfWork)
     {
-        _paisRepository = paisRepository;
+        this.unitOfWork = _unitOfWork;
     }
 
     [HttpGet]
@@ -18,7 +18,7 @@ public class PaisApiController : BaseApiController
 
     public async Task<ActionResult<IEnumerable<Pais>>> Get()
     {
-        var paises = await _paisRepository.GetAllAsync();
+        var paises = await unitOfWork.Paises.GetAllAsync();
         return Ok(paises);
     }
 
@@ -28,7 +28,36 @@ public class PaisApiController : BaseApiController
 
     public async Task<IActionResult> Get(int id)
     {
-        var pais = await _paisRepository.GetByIdAsync(id);
+        var pais = await unitOfWork.Paises.GetByIdAsync(id);
         return Ok(pais);
     } 
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public async Task<ActionResult<IEnumerable<Pais>>> Post(Pais pais)
+    {
+        unitOfWork.Paises.Add(pais);
+        await unitOfWork.SaveAsync();
+        if (pais == null)
+        {
+            return BadRequest();
+        }
+        return CreatedAtAction(nameof(Post), new {id = pais.Id}, pais);
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<Pais>>> Delete(Pais pais)
+    {
+        unitOfWork.Paises.Remove(pais);
+        await unitOfWork.SaveAsync();
+        if (pais == null)
+        {
+            return BadRequest();
+        }
+        return CreatedAtAction(nameof(Post), new {id = pais.Id}, pais);
+    }
 }

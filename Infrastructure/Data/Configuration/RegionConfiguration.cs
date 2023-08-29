@@ -17,6 +17,6 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
 
         builder.HasOne(p => p.Estado)
         .WithMany(p => p.Regiones)
-        .HasForeignKey(p => p.Id);
+        .HasForeignKey(p => p.IdEstado);
     }
 }

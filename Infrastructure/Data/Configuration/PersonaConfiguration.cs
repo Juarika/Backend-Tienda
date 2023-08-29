@@ -25,11 +25,11 @@ public class PersonaConfiguration : IEntityTypeConfiguration<Persona>
 
         builder.HasOne(p => p.Region)
         .WithMany(r => r.Personas)
-        .HasForeignKey(f => f.Id);
+        .HasForeignKey(f => f.IdRegion);
 
         builder.HasOne(p => p.TipoPersona)
         .WithMany(e => e.Personas)
-        .HasForeignKey(f => f.Id);
+        .HasForeignKey(f => f.IdTipoPer);
 
         builder
         .HasMany(p => p.Productos)
