@@ -13,7 +13,7 @@ builder.Services.AddAplicacionServices();
 
 builder.Services.AddDbContext<TiendaContext>(OptionsBuilder =>
 {   
-    string ? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     OptionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -47,7 +47,7 @@ public class PaisApiController : BaseApiController
         return CreatedAtAction(nameof(Post), new {id = pais.Id}, pais);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<Pais>>> Delete(Pais pais)
